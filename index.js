@@ -87,10 +87,9 @@ Please only post videos (including in replies). Your message was deleted. :tv:`;
           await client.chat.postMessage({
             channel: event.user,
             text: `Your message in <#${VIDEO_ONLY_CHANNEL}> was deleted because it wasn't a video.
-            :badly-drawn-alert-1: **The channel is video-only!**
-            Please post videos (uploaded video files, etc.) for giving and receiving feedback. 
-            Both main messages and replies must be videos.
-            Thanks for understanding! <3`,
+:badly-drawn-alert-1: The channel is video-only!
+Please post videos (uploaded video files, etc.) for giving and receiving feedback. 
+Both main messages and replies must be videos.`,
             mrkdwn: true,
           });
         } catch (dmError) {
