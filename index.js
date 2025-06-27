@@ -57,39 +57,44 @@ app.event('message', async ({ event, client, context }) => {
       !event.subtype &&
       event.user !== context.botUserId
     ) {
+      const userInfo = await client.users.info({
+        user: event.user,
+      });
+
+      if (userInfo.ok && (userInfo.user.is_admin || userInfo.user.is_owner)) {
+        return;
+      }
+
       if (!isVideoMessage(event)) {
-        await client.chat.delete({
-          channel: event.channel,
-          ts: event.ts,
-        });
+        // Commenting out message deletion for now
+        // await client.chat.delete({
+        //   channel: event.channel,
+        //   ts: event.ts,
+        // });
 
-        const warningMessage = `:badly-drawn-alert-1: <@${event.user}> This channel is **video-only**! 
-
-:cinemaa: Please only post videos (including in replies). Your message was deleted.
-
-If you need help, ask in #neighborhood!`;
+        const warningMessage = `:warn: <@${event.user}> This channel is video-only! 
+Please only post videos (including in replies). Your message was deleted. :tv:`;
 
         await client.chat.postEphemeral({
           channel: event.channel,
           user: event.user,
           text: warningMessage,
           thread_ts: event.thread_ts,
+          mrkdwn: true,
         });
 
         try {
           await client.chat.postMessage({
             channel: event.user,
-            text: `Your message in <#${VIDEO_ONLY_CHANNEL}> was deleted because it wasn't a video. 
-
-:badly-drawn-alert-1: **The channel is video-only!** 
-
-Please post videos (uploaded video files, etc.) for giving and receiving feedback. Both main messages and replies must be videos.
-
-Thanks for understanding! <3`,
+            text: `Your message in <#${VIDEO_ONLY_CHANNEL}> was deleted because it wasn't a video.
+            :badly-drawn-alert-1: **The channel is video-only!**
+            Please post videos (uploaded video files, etc.) for giving and receiving feedback. 
+            Both main messages and replies must be videos.
+            Thanks for understanding! <3`,
+            mrkdwn: true,
           });
         } catch (dmError) {
-      console.error('Failed to send DM to user:', dmError);
-      // I dont think this is possible, but if it is then better have it than crash lol
+          console.error('Failed to send DM to user:', dmError);
         }
       }
     }

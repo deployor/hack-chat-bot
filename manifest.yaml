@@ -1,8 +1,8 @@
 display_information:
-  name: Hackchat
+  name: HackChat
 features:
   bot_user:
-    display_name: Hackchat
+    display_name: HackChat
     always_online: false
 oauth_config:
   scopes:
@@ -12,6 +12,8 @@ oauth_config:
       - chat:write
       - chat:write.customize
       - im:write
+      - users:read
+      - files:read
 settings:
   event_subscriptions:
     request_url: https://beans22.share.zrok.io/slack/events
